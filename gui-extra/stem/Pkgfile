@@ -1,0 +1,19 @@
+# Depends on: python
+
+description="Python controller library for Tor."
+url="hhttps://stem.torproject.org/"
+packager="tnut <tnut@nutyx.org>"
+contributors="Fanch"
+
+name=stem
+version=1.6.0
+release=1
+
+source=()
+
+build() {
+	git clone https://git.torproject.org/nyx.git  $name
+    cd $name
+    python3 setup.py check
+    python3 setup.py install --prefix=/usr --root=$PKG
+}
