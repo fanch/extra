@@ -1,27 +1,20 @@
 description="Feature-rich cron implementation"
 url="http://fcron.free.fr"
 contributors="Pierre, Greg"
-packager="tnut<tnut@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 
 # Depends on: vim 
 
 name=fcron
 version=3.2.1
-release=2
-nutyx_version=9.92
+release=3
 
-source=(http://downloads.nutyx.org/files/nutyx-${nutyx_version}.tar.xz
-	http://fcron.free.fr/archives/$name-$version.src.tar.gz )
-
-
-prepare() {
-
-	unset MAKEFLAGS
-}
+source=(http://fcron.free.fr/archives/$name-$version.src.tar.gz )
 
 
 build() {
-
+source /etc/blfs-bootscripts
+wget http://www.linuxfromscratch.org/blfs/downloads/svn/$scripts-$scriptsversion.tar.bz2
 	cd $name-$version
 
 	./configure --prefix=/usr --sysconfdir=/etc \
@@ -31,13 +24,6 @@ build() {
 		--with-systemdsystemunitdir=no
 
 	make
-
-}
-
-
-package() {
-
-	cd $name-$version
 
 	make DESTDIR=$PKG install
 
@@ -49,8 +35,9 @@ package() {
 	
 	done
 
-# Service
-cd ../nutyx-${nutyx_version}
+cd $SRC
+	tar xf $scripts-$scriptsversion.tar.bz2
+	cd $SRC/$scripts-$scriptsversion
 make DESTDIR=$PKG install-fcron
 
 }

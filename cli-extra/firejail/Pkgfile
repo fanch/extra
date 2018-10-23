@@ -1,12 +1,12 @@
 description="Linux namespaces sandbox program"
 url="https://l3net.wordpress.com/projects/firejail/"
-packager="remy <remy@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 contributors="Hugo"
-name=firejail
-version=0.9.52
 
-source=(
-https://sourceforge.net/projects/firejail/files/$name/$name-$version.tar.xz)
+name=firejail
+version=0.9.56
+release=1
+source=(https://sourceforge.net/projects/firejail/files/$name/$name-$version.tar.xz)
 
 build(){
 cd $name-$version

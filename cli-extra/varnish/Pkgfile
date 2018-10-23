@@ -1,4 +1,4 @@
-# Depends on: libedit pcre python2-docutils
+# Depends on: libedit pcre python-docutils python-sphinx
 
 description="Varnish is a web application accelerator."
 url="http://www.varnish-cache.org/"
@@ -6,10 +6,10 @@ contributors="alieanus, Tnut"
 packager="greg <greg@nutyx.org>"
 
 name=varnish
-version=5.1.3
+version=6.1.0
 release=1
 
-source=(http://repo.varnish-cache.org/source/$name-$version.tar.gz
+source=(http://varnish-cache.org/_downloads/$name-$version.tgz
 		varnish.service)
 
 build(){

@@ -8,27 +8,19 @@ contributors="Greg"
 name=abduco
 version=0.6
 release=2
-
 source=(http://brain-dump.org/projects/$name/$name-$version.tar.gz config.h)
 
 prepare() {
 cd $name-$version
 cp "${srcdir}/config.h" .
 }
-
 build() {
 cd $name-$version
 make all
 }
-
 package() {
 cd $name-$version
 make DESTDIR=$PKG PREFIX=/usr install
- 
 }
 
-uptodate() {
-echo "Fonction  vide, normal..." 
-}
 
-# Recette editee le 12/02/18 a 18:00

@@ -2,15 +2,15 @@
 
 description="Tor is a anonymous network and proxy."
 url="http://www.torproject.org/"
-packager="tnut <tnut@nutyx.org>"
-contributors="Greg"
+packager="fanch <fanch@nutyx.org>"
+contributors="fanch"
 
 name=tor
-version=0.3.2.10
-
+version=0.3.4.8
+release=1
 source=(https://www.torproject.org/dist/tor-$version.tar.gz
-	tor.rc
-	tor-config.patch)
+		tor.rc
+		tor-config.patch)
 
 prepare() {
 	cd $name-$version

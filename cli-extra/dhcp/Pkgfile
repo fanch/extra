@@ -1,18 +1,18 @@
 description="The ISC DHCP package contains both the client and server programs for DHCP."
 url="ftp://ftp.isc.org/isc/dhcp"
 contributors="berlius, tnut, greg"
-packager="tnut <tnut@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 
 name=dhcp
 version=4.4.1
-nutyx_version=10.1
+release=1
 
-source=(http://downloads.nutyx.org/files/nutyx-${nutyx_version}.tar.xz
-	ftp://ftp.isc.org/isc/dhcp/$version/dhcp-$version.tar.gz
-	dhclient.conf dhcpd.conf )
+source=(ftp://ftp.isc.org/isc/dhcp/$version/dhcp-$version.tar.gz
+		dhclient.conf dhcpd.conf )
 
 build() {
-
+source /etc/blfs-bootscripts
+wget http://www.linuxfromscratch.org/blfs/downloads/svn/$scripts-$scriptsversion.tar.bz2
 	cd $name-$version
 
 	CFLAGS="-D_PATH_DHCLIENT_SCRIPT='\"/sbin/dhclient-script\"' \
@@ -40,8 +40,9 @@ build() {
 	install -v -dm 755 $PKG/var/lib/dhclient
 	install -v -dm 755 $PKG/etc/sysconfig
 
-	# Service
-	cd $SRC/nutyx-${nutyx_version}
+	cd $SRC
+	tar xf $scripts-$scriptsversion.tar.bz2
+	cd $SRC/$scripts-$scriptsversion
 	make DESTDIR=$PKG install-service-dhclient
 	install -v -dm 755 $PKG/var/lib/dhcpd
 

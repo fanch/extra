@@ -1,27 +1,23 @@
 # Depends on: ncurses file
 description="A simple text editor which aims to replace Pico, the default editor in the Pine package."
 url="http://www.nano-editor.org/"
-packager="remy <remy@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 contributors="Pierre B, Tnut, Greg"
 
 name=nano
-version=2.9.4
-
-source=(http://www.nano-editor.org/dist/v${version:0:3}/$name-$version.tar.xz)
+version=3.1
+release=1
+source=(https://www.nano-editor.org/dist/v3/$name-$version.tar.xz)
 
 build() {
 cd $name-$version
 
-./configure --prefix=/usr \
---sysconfdir=/etc \
---enable-color    \
---enable-utf8     \
---docdir=/usr/share/doc/nano-$version \
---disable-x
-
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --enable-utf8     \
+            --docdir=/usr/share/doc/nano-$version
 make
-
 make DESTDIR=$PKG install
-
-mkdir -p $PKG/etc/nano
+install -v -m644 doc/{nano.html,sample.nanorc} $PKG/usr/share/doc/nano-3.1
+rm -r $PKG/usr/share/info
 }

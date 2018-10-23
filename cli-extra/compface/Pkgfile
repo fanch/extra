@@ -6,29 +6,20 @@ contributors="Tnut"
 name=compface
 version=1.5.2
 release=1
-
 source=(http://mirrors.ibiblio.org/xemacs/aux/$name-$version.tar.gz
 		compface-1.5.2-build.patch)
 
 prepare() {
-
   cd $name-$version
-  patch -Np0 -i $SRC/compface-1.5.2-build.patch
-  
+  patch -Np0 -i $SRC/compface-1.5.2-build.patch  
 }
-
 build() {
-
   cd $name-$version
   CFLAGS="$CFLAGS -fPIC"
   ./configure --prefix=/usr --mandir=/usr/share/man
   make
-  
 }
-
 package() {
-
   cd $name-$version
   make DESTDIR=$PKG STRIP=/bin/true install
-
 }

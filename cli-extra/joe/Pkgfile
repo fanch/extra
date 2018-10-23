@@ -5,13 +5,12 @@ packager="tnut <tnut@nutyx.org>"
 
 name=joe
 version=4.6
-
+release=1
 source=(https://downloads.sourceforge.net/joe-editor/$name-$version.tar.gz)
 
 build() {
-
   cd $SRC/$name-$version
-
+  
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
 	--mandir=/usr/share/man \
@@ -20,6 +19,5 @@ build() {
   make DESTDIR=$PKG install
 
   install -vm 755 joe/util/{stringify,termidx,uniproc} \
-  $PKG/usr/bin
-  
+  $PKG/usr/bin 
 }

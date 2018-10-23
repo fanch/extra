@@ -3,18 +3,18 @@
 description="Mail Transport Agent (MTA) for sending email to other users of your host machine"
 url="http://www.postfix.org"
 contributors="Berlius, Fanch, Tnut, Greg"
-packager="tnut <tnut@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 
 
 name=postfix
 version=3.2.5
-nutyx_version=10.0.1
+release=1
 
-source=(http://downloads.nutyx.org/files/nutyx-${nutyx_version}.tar.xz
-	ftp://ftp.porcupine.org/mirrors/postfix-release/official/$name-$version.tar.gz)
+source=(ftp://ftp.porcupine.org/mirrors/postfix-release/official/$name-$version.tar.gz)
 
 build() {
-
+	source /etc/blfs-bootscripts
+	wget http://www.linuxfromscratch.org/blfs/downloads/svn/$scripts-$scriptsversion.tar.bz2
     cd $name-$version
 
     sed -i 's/.\x08//g' README_FILES/*
@@ -34,12 +34,9 @@ build() {
 	readme_directory=$PKG/usr/share/doc/postfix-$version/readme
 
 
-}
-
-
-package () {
-
-	cd $SRC/nutyx-${nutyx_version}
+	cd $SRC
+	tar xf $scripts-$scriptsversion.tar.bz2
+	cd $SRC/$scripts-$scriptsversion
 	make DESTDIR=$PKG install-postfix 
 
 }

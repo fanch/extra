@@ -6,13 +6,10 @@ packager="greg<greg@nutyx.org>"
 name=dash
 version=0.5.9.1
 release=1
-
-
 source=(http://gondor.apana.org.au/~herbert/dash/files/dash-$version.tar.gz)
 
 
 build(){
-
 	cd $name-$version
 	./configure \
 		--prefix=/usr \
@@ -21,13 +18,9 @@ build(){
 		--exec-prefix="" \
 		--with-libedit
 	make
-
 }
-
 package() {
-
 	cd $name-$version
-	make DESTDIR=$PKG install
-  
+	make DESTDIR=$PKG install  
 }
 

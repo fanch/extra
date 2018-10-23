@@ -2,12 +2,23 @@
 
 description="3GPP AMR Adaptive Multi-Rate - Wideband (AMR-WB) Speech Codec"
 url="http://www.penguin.cz/~utx/amr"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 contributors=""
 
 name=amrwb
-version=11.0.0.0
-release=1
+version=7.0.0.4
+release=2
+source=(http://ftp.penguin.cz/pub/users/utx/amr/$name-$version.tar.bz2
+	http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-700.zip)
 
-source=(ftp://ftp.penguin.cz/pub/users/utx/amr/${name}-${version}.tar.bz2)
+build() {
+	cd $name-$version
+	cp $SRC/26204-700_ANSI-C_source_code.zip .
+	sed -i -e 's|	$(MAKE) $(top_srcdir)/26204-700_ANSI-C_source_code.zip||' Makefile.in
+
+	./configure --prefix=/usr
+
+	make
+	make DESTDIR=$PKG install
+}
 
