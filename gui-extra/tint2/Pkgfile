@@ -6,29 +6,19 @@ packager="remy<remy@nutyx.org>"
 contributors="greg"
 
 name=tint2
-version=16.2
+version=16.6.1
 release=1
-
 source=()
 
-
-
 build() {
-
 git clone https://gitlab.com/o9000/tint2.git
 
 cd $name
-
 cmake \
 	-DCMAKE_INSTALL_PREFIX=/usr \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DENABLE_TINT2CONF=OFF \
 	-GNinja
 ninja
-}
-
-package() {
-
-	cd $name
-	DESTDIR=$PKG ninja install
+DESTDIR=$PKG ninja install
 }
