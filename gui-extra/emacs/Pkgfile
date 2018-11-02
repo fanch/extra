@@ -3,22 +3,18 @@
 description="An extensible, customizable, self-documenting real-time display editor."
 url="https://www.gnu.org/software/emacs/"
 contributors="berlius, tnut"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 
 name=emacs
-version=25.3
+version=26.1
 release=1
-
 source=(https://ftp.gnu.org/pub/gnu/emacs/$name-$version.tar.xz)
 
 build () {
-
 cd $name-$version
-    
 ./configure --prefix=/usr \
 --localstatedir=/var
 make
 make DESTDIR=$PKG install
 chown -v -R root:root $PKG/usr/share/emacs/$version
-
 }
