@@ -3,12 +3,12 @@
 description="A WYSIWYG text editor that aims at bringing the concept of a wiki to the desktop."
 url="http://zim-wiki.org/"
 contributors="alienus, tnut"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 
 run=(python2-gtk dejavu-ttf desktop-file-utils shared-mime-info)
 
 name=zim
-version=0.67
+version=0.68
 release=1
 
 source=(
