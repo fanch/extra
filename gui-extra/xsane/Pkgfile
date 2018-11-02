@@ -10,8 +10,7 @@ description="sane frontend with additional features to improve the image quality
 name=xsane
 version=0.999
 release=3
-
-source=(http://www.xsane.org/download/xsane-$version.tar.gz)
+source=(https://ftp.osuosl.org/pub/blfs/conglomeration/xsane/xsane-$version.tar.gz)
 
 build() {
 cd xsane-$version
