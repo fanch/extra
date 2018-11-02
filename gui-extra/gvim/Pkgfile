@@ -1,29 +1,25 @@
 # Depends on:  vim, gtk3, xorg-libxt
 
+run=(vim)
+
 description="GTK version of the vim editor"
 url="http://www.vim.org/"
 contributors="fanch, tnut"
-packager="greg<greg@nutyx.org"
+packager="fanhc<fanch@nutyx.org"
 
 name=gvim
-version=8.0.586
+version=8.1
 release=1
-
-run=(vim)
-
 source=(ftp://ftp.vim.org/pub/vim/unix/vim-$version.tar.bz2)
 
 build () {
-
-    cd vim80/src
-    
-    ./configure --prefix=/usr \
+    cd vim81/src
+		./configure --prefix=/usr \
                 --with-vim-name=gvim \
                 --with-x=yes \
                 --enable-gui=gtk3 \
                 --enable-multibyte \
                 --disable-gpm
-
     make
     make runtime
     make DESTDIR=$PKG installvimbin
