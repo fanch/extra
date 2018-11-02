@@ -1,5 +1,6 @@
 # Depends on: alsa-lib zlib libvorbis xorg-libxdamage xorg-libxext libtheora xorg-libsm jack
 description="Produces a OGG encapsulated Theora/Vorbis recording of your desktop"
+
 name=recordmydesktop
 version=0.3.8.1
 release=1

@@ -1,39 +1,26 @@
 # Depends on: sdl-net zlib sdl-mixer libglade libpng alsa-lib xorg-glu
 
-description="Emulator with builtin DOS for running DOS Games"
+description='Emulator with builtin DOS for running DOS Games'
 url="http://dosbox.sourceforge.net/"
-packager="greg<greg@nutyx.org"
-
-name=dosbox
-version=0.74
-release=1
+packager="fanch<fanch@nutyx.org"
 
 run=()
 
-source=(http://download.sourceforge.net/$name/$name-$version.tar.gz
-)
-
-prepare() {
-
-cd $name-$version
-
-}
-
+name=dosbox
+version=0.74.2
+_version=0.74-2
+release=1
+source=(http://downloads.sourceforge.net/$name/$name-0.74-2.tar.gz
+        dosbox.png)
 
 build() {
-
-cd $name-$version
-./configure --prefix=/usr --mandir=/usr/man
-sed -i '23a#include <cstddef>' include/dos_inc.h
-make
-
-}
-
-
-package() {
-
-cd $name-$version
-make DESTDIR=$PKG install
-	
+	cd $name-${_version}
+	sed -i 's/png_check_sig/png_sig_cmp/' configure
+	./configure --prefix=/usr --sysconfdir=/etc/dosbox
+	make
+	make DESTDIR=$PKG install
+	install -Dm644 README ${PKG}/usr/share/doc/$name/README
+	install -Dm644 docs/README.video ${PKG}/usr/share/doc/$name/README.video
+	install -Dm644 ${SRC}/$name.png ${PKG}/usr/share/pixmaps/$name.png
 }
 

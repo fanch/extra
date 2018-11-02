@@ -1,4 +1,4 @@
-# Depends on: libglade libgnomecanvas popt libpcap gnome-doc-utils
+# Depends on: libglade goocanvas popt libpcap gnome-doc-utils
 
 description="A graphical network monitor for various OSI layers and protocols"
 url="http://etherape.sourceforge.net/"
@@ -8,12 +8,10 @@ contributors="fanch@nutyx.org"
 name=etherape
 version=0.9.18
 release=1
-
 source=(https://downloads.sourceforge.net/${name}/${name}-${version}.tar.gz)
 
 
 build() {
-
   cd $SRC/${name}-${version}
   autoreconf -fi
   ./configure --prefix=/usr --sysconfdir=/etc

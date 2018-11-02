@@ -1,23 +1,23 @@
-# Depends on: icu libvpx nspr libevent rustc autoconf2-13 pulseaudio gconf yasm sqlite libvpx libevent nss alsa-lib gtk2 gtk3 zip unzip gstreamer gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-libav shared-mime-info
+# Depends on: python-setuptools cbindgen icu libvpx nspr nss libevent rustc dbus-glib autoconf2-13 pulseaudio gconf libnotify yasm sqlite nss alsa-lib gtk2 gtk3 zip unzip gstreamer gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-libav shared-mime-info
 
 description="Standalone web browser from mozilla.org"
 url="http://www.mozilla.com/firefox/"
 packager="tnut <tnut@nutyx.org>"
-contributors="Pierre B, remy"
+contributors="Pierre B, tnut, Remy"
 
 run=(shared-mime-info icu libvpx libevent pulseaudio gconf sqlite libvpx nss alsa-lib gtk2 gtk3 zip unzip gstreamer gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-libav)
 name=firefox
-version=58.0.2
-release=3
-
-source=( https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$version/source/firefox-$version.source.tar.xz)
+version=63.0
+release=1
+source=(firefox.desktop
+	firefox-$version-system_graphite2_harfbuzz-1.patch
+	https://archive.mozilla.org/pub/firefox/releases/$version/source/$name-$version.source.tar.xz)
 
 build() {
 
-cd $SRC
 ARCH=`uname -m`
 
-for lang in ar da de es-ES fi fr it nb-NO nl pt-PT ru sv-SE tr
+for lang in ar da de es-ES fi fr it nb-NO nl pt-PT ru sv-SE tr ja zh-CN hi-IN
 do 
 wget  http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/$version/linux-$ARCH/xpi/$lang.xpi
 done
@@ -30,18 +30,23 @@ cat > mozconfig << "EOF"
 # If you have a multicore machine, all cores will be used by default.
 # If desired, you can reduce the number of cores used, e.g. to 1, by
 # uncommenting the next line and setting a valid number of CPU cores.
-#mk_add_options MOZ_MAKE_FLAGS="-j1"
+# mk_add_options MOZ_MAKE_FLAGS="-j1"
 
 # If you have installed dbus-glib, comment out this line:
-ac_add_options --disable-dbus
+#ac_add_options --disable-dbus
 
 # If you have installed dbus-glib, and you have installed (or will install)
 # wireless-tools, and you wish to use geolocation web services, comment out
 # this line
 ac_add_options --disable-necko-wifi
 
-# Uncomment this option if you wish to build with gtk+-2
-#ac_add_options --enable-default-toolkit=cairo-gtk2
+# API Keys for geolocation APIs - necko-wifi (above) is required for MLS
+# Uncomment the following line if you wish to use Mozilla Location Service
+#ac_add_options --with-mozilla-api-keyfile=$PWD/mozilla-key
+
+# Uncomment the following line if you wish to use Google's geolocaton API
+# (needed for use with saved maps with Google Maps)
+#ac_add_options --with-google-api-keyfile=$PWD/google-key
 
 # Uncomment these lines if you have installed optional dependencies:
 #ac_add_options --enable-system-hunspell
@@ -53,26 +58,22 @@ ac_add_options --disable-necko-wifi
 # If you have installed GConf, comment out this line
 ac_add_options --disable-gconf
 
-# Stylo is the new CSS code, including the rust 'style'
-# package. It is enabled by default, but cannot find the
-# headers for system nspr, pixman. If you enable stylo you
-# must comment out system-nspr system-pixman and
-# system-cairo, and you must also have installed clang.
-ac_add_options --disable-stylo
+# From firefox 64 will be required
+ac_add_options --disable-nodejs
 
 # Comment out following options if you have not installed
 # recommended dependencies:
 ac_add_options --enable-system-sqlite
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
-#ac_add_options --with-system-nss
-#ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-nspr
 ac_add_options --with-system-icu
 
 # If you are going to apply the patch for system graphite
 # and system harfbuzz, uncomment these lines:
-#ac_add_options --with-system-graphite2
-#ac_add_options --with-system-harfbuzz
+ac_add_options --with-system-graphite2
+ac_add_options --with-system-harfbuzz
 
 # Stripping is now enabled by default.
 # Uncomment these lines if you need to run a debugger:
@@ -93,21 +94,20 @@ ac_add_options --enable-optimize="-O2"
 
 ac_add_options --enable-official-branding
 
-# From firefox-40, using system cairo causes firefox to crash
-# frequently when it is doing background rendering in a tab.
-ac_add_options --enable-system-cairo
+# From firefox-61, system cairo is not supported
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
 
-ac_add_options --with-pthreads
 
 ac_add_options --with-system-bz2
 ac_add_options --with-system-jpeg
-#ac_add_options --with-system-png
+ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 EOF
+
+patch -Np1 -i ../firefox-$version-system_graphite2_harfbuzz-1.patch
 
 SHELL=/bin/sh ./mach build
 SHELL=/bin/sh ./mach buildsymbols
@@ -116,30 +116,16 @@ mkdir -pv $PKG/usr/{bin,lib{,/mozilla/plugins}}
 
 SHELL=/bin/sh DESTDIR=$PKG ./mach install
 
-chown -R 0:0 $PKG/usr/lib/firefox-$version
-ln -sf ../lib/firefox-$version/firefox $PKG/usr/bin
-ln -sf ../mozilla/plugins $PKG/usr/lib/firefox-$version
+ln -svf ../mozilla/plugins $PKG/usr/lib/firefox/browser/
 
 # Need for gnash
 mkdir -p $PKG/usr/include/npapi
 cp -v dom/plugins/base/*.h $PKG/usr/include/npapi
 
 # Launcher 
-mkdir -pv $PKG/usr/share/applications &&
-cat > $PKG/usr/share/applications/firefox.desktop << "EOF" &&
-[Desktop Entry]
-Encoding=UTF-8
-Name=Firefox Web Browser
-Comment=Browse the World Wide Web
-GenericName=Web Browser
-Exec=firefox %u
-Terminal=false
-Type=Application
-Icon=firefox
-Categories=GNOME;GTK;Network;WebBrowser;
-MimeType=application/xhtml+xml;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;
-StartupNotify=true
-EOF
+mkdir -pv $PKG/usr/share/applications
+install -Dm644 $SRC/firefox.desktop $PKG/usr/share/applications/firefox.desktop
+
 mkdir -pv $PKG/usr/share/pixmaps
 ln -sf /usr/lib/firefox-$version/browser/icons/mozicon128.png $PKG/usr/share/pixmaps/firefox.png
 
@@ -150,15 +136,15 @@ do
       $PKG/usr/share/icons/hicolor/${i}x${i}/apps/firefox.png
 done
 
-for lang in ar da de tr es-ES fi fr it nb-NO nl pt-PT ru sv-SE tr
+for lang in ar da de tr es-ES fi fr it nb-NO nl pt-PT ru sv-SE tr ja zh-CN hi-IN
+
 do 
 install -Dm644 $SRC/$lang.xpi \
-    $PKG/usr/lib/firefox-$version/browser/extensions/langpack-$lang@firefox.mozilla.org.xpi
+    $PKG/usr/lib/firefox/browser/extensions/langpack-$lang@firefox.mozilla.org.xpi
 done
-
-cat > $PKG/usr/lib/firefox-$version/defaults/pref/vendor.js << "EOF"
+install -Dm644 /dev/stdin $PKG/usr/lib/firefox/browser/defaults/preferences/vendor.js <<END
 // Use LANG environment variable to choose locale
-pref("intl.locale.matchOS", true);
+pref("intl.locale.requested", "");
 
 // Disable default browser checking.
 pref("browser.shell.checkDefaultBrowser", false);
@@ -166,5 +152,6 @@ pref("browser.shell.checkDefaultBrowser", false);
 // Don't disable our bundled extensions in the application directory
 pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
-EOF
+END
+
 }

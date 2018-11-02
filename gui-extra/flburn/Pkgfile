@@ -11,10 +11,8 @@ release=2
 source=()
 
 build() {
-
 	git clone git://git.code.sf.net/p/flburn/code flburn-code
 	cd flburn-code
 	make
-	
 	install -D -m755 "$name" "$PKG/usr/bin/$name"
 }

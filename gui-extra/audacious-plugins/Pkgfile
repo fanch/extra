@@ -2,29 +2,17 @@
 
 description="Plugins for the audacious media player"
 url="http://audacious-media-player.org"
-packager="greg <greg@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 contributors="tnut"
 
 name=audacious-plugins
-version=3.9
+version=3.10
 release=1
-
 source=(http://distfiles.audacious-media-player.org/$name-$version.tar.bz2)
 
 build() {
-
 	cd $SRC/$name-$version
-
-	./configure --prefix=/usr
-	
-	make
-	
-}
-
-package() {
-
-	cd $SRC/$name-$version
-	
+	./configure --prefix=/usr	
+	make	
 	make DESTDIR=$PKG install
-	
 }

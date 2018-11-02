@@ -4,6 +4,7 @@ description="Dungeon Crawl Stone Soup is a singleplayer roguelike game - Tiles v
 url="http://crawl.develz.org/"
 packager="remy <remy@nutyx.org>"
 contributors="berlius at nutyx dot com, tnut at nutyx dot org"
+
 name=crawl-tiles
 version=0.21.1
 release=1

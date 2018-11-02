@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<title>0001-glibc-2.28-compatibility.patch - aur.git - AUR Package Repositories</title>
+<meta name='generator' content='cgit v1.2.1-2-g66f5'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/css/cgit.css'/>
+<link rel='shortcut icon' href='/images/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='https://aur.archlinux.org/cgit/aur.git/atom/0001-glibc-2.28-compatibility.patch?h=spacefm' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://aur.archlinux.org/spacefm.git/' title='aur.git Git repository'/>
+</head>
+<body>
+		<div id="archnavbar" class="anb-aur">
+			<div id="archnavbarlogo"><h1><a href="/" title="Return to the main page">Arch Linux User Repository</a></h1></div>
+			<div id="archnavbarmenu">
+				<ul id="archnavbarlist">
+					<li id="anb-home"><a href="https://www.archlinux.org/" title="Arch news, packages, projects and more">Home</a></li>
+					<li id="anb-packages"><a href="https://www.archlinux.org/packages/" title="Arch Package Database">Packages</a></li>
+					<li id="anb-forums"><a href="https://bbs.archlinux.org/" title="Community forums">Forums</a></li>
+					<li id="anb-wiki"><a href="https://wiki.archlinux.org/" title="Community documentation">Wiki</a></li>
+					<li id="anb-bugs"><a href="https://bugs.archlinux.org/" title="Report and track bugs">Bugs</a></li>
+					<li id="anb-security"><a href="https://security.archlinux.org/" title="Arch Linux Security Tracker">Security</a></li>
+					<li id="anb-aur"><a href="/" title="Arch Linux User Repository">AUR</a></li>
+					<li id="anb-download"><a href="https://www.archlinux.org/download/" title="Get Arch Linux">Download</a></li>
+				</ul>
+			</div>
+		</div><!-- #archnavbar -->
+<div id='cgit'><table id='header'>
+<tr>
+<td class='main'>AUR : spacefm.git</td></tr>
+<tr><td class='sub'>AUR Package Repositories | click <a href='/pkgbase/spacefm/'>here</a> to return to the package base details page</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a href='/cgit/aur.git/?h=spacefm'>summary</a><a href='/cgit/aur.git/log/0001-glibc-2.28-compatibility.patch?h=spacefm'>log</a><a class='active' href='/cgit/aur.git/tree/0001-glibc-2.28-compatibility.patch?h=spacefm'>tree</a><a href='/cgit/aur.git/commit/0001-glibc-2.28-compatibility.patch?h=spacefm'>commit</a><a href='/cgit/aur.git/diff/0001-glibc-2.28-compatibility.patch?h=spacefm'>diff</a><a href='/cgit/aur.git/stats/0001-glibc-2.28-compatibility.patch?h=spacefm'>stats</a></td><td class='form'><form class='right' method='get' action='/cgit/aur.git/log/0001-glibc-2.28-compatibility.patch'>
+<input type='hidden' name='h' value='spacefm'/><select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='search' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='path'>path: <a href='/cgit/aur.git/tree/?h=spacefm'>root</a>/<a href='/cgit/aur.git/tree/0001-glibc-2.28-compatibility.patch?h=spacefm'>0001-glibc-2.28-compatibility.patch</a></div><div class='content'>blob: 14e4dbaa6510a08837833a92ee675c423dbaf002 (<a href='/cgit/aur.git/plain/0001-glibc-2.28-compatibility.patch?h=spacefm'>plain</a>)
+<table summary='blob content' class='blob'>
+<tr><td class='linenumbers'><pre><a id='n1' href='#n1'>1</a>
+<a id='n2' href='#n2'>2</a>
+<a id='n3' href='#n3'>3</a>
+<a id='n4' href='#n4'>4</a>
+<a id='n5' href='#n5'>5</a>
+<a id='n6' href='#n6'>6</a>
+<a id='n7' href='#n7'>7</a>
+<a id='n8' href='#n8'>8</a>
+<a id='n9' href='#n9'>9</a>
+<a id='n10' href='#n10'>10</a>
+<a id='n11' href='#n11'>11</a>
+<a id='n12' href='#n12'>12</a>
+<a id='n13' href='#n13'>13</a>
+<a id='n14' href='#n14'>14</a>
+<a id='n15' href='#n15'>15</a>
+<a id='n16' href='#n16'>16</a>
+<a id='n17' href='#n17'>17</a>
+<a id='n18' href='#n18'>18</a>
+<a id='n19' href='#n19'>19</a>
+<a id='n20' href='#n20'>20</a>
+<a id='n21' href='#n21'>21</a>
+<a id='n22' href='#n22'>22</a>
+<a id='n23' href='#n23'>23</a>
+<a id='n24' href='#n24'>24</a>
+</pre></td>
+<td class='lines'><pre><code>From cb8cda4ec4200752caf8d297e9395f32ec2a81d8 Mon Sep 17 00:00:00 2001
+From: FabioLolix &lt;fabio.lolix&#64;gmail.com&gt;
+Date: Fri, 17 Aug 2018 13:18:40 +0200
+Subject: [PATCH] glibc 2.28 compatibility
+
+<span class="hl kwb">---</span>
+ src/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/main.c b/src/main.c
+index 27f5614..2b45708 100644
+<span class="hl kwb">--- a/src/main.c</span>
+<span class="hl kwa">+++ b/src/main.c</span>
+<span class="hl kwd">&#64;&#64; -23,6 +23,7 &#64;&#64;</span>
+ #include &lt;sys/types.h&gt;
+ #include &lt;sys/socket.h&gt;
+ #include &lt;sys/un.h&gt;
+<span class="hl kwa">+#include &lt;sys/sysmacros.h&gt;</span>
+ 
+ #include &lt;signal.h&gt;
+ 
+<span class="hl kwb">-- </span>
+2.18.0
+
+</code></pre></td></tr></table>
+</div> <!-- class=content -->
+<div id="footer">
+	<p>
+		Copyright &copy; 2004-2018 aurweb Development Team &ndash;
+		<strong>AUR packages are user produced content. Any use of the provided files is at your own risk.</strong>
+	</p>
+</div>
+</div> <!-- id=cgit -->
+</body>
+</html>

@@ -1,29 +1,26 @@
-# Depends on: crypto++ util-linux wxgtk
-
-description=" An all-platform Edonkey client."
-url="http://www.amule.org"
-packager="tnut <tnut@nutyx.org>"
-contributors="Greg"
+# Description: An all-platform Edonkey client.
+# URL: http://www.amule.org/
+# Maintainer: "tnut <tnut@nutyx.org>"
+# Packager: "fanch <fanch@nutyx.org>"
+# Depends on: crypto++ wxgtk
 
 name=amule
 version=2.3.2
-release=2
-
+release=3
 source=(https://downloads.sourceforge.net/project/amule/aMule/$version/aMule-$version.tar.bz2)
 
 
 build() {
    cd aMule-$version
-
 	./configure \
-		--prefix=/usr 
-		
+	--prefix=/usr \
+	--disable-debug \
+    --disable-rpath \
+    --enable-alcc  \
+    --enable-geoip  \
+    --enable-mmap  \
+    --enable-optimize  \
+    --with-boost	
 	make
-}
-
-package() {
-
-    cd aMule-$version
-	make install DESTDIR=$PKG
-	
+	make install DESTDIR=$PKG	
 }

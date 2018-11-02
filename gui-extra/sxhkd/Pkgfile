@@ -2,10 +2,10 @@
 
 description="Simple X hotkey daemon"
 url="https://github.com/baskerville/sxhkd"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 
 name=sxhkd
-version=0.5.8
+version=0.5.9
 release=1
 
 source=(https://github.com/baskerville/$name/archive/$version.tar.gz)

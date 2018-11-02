@@ -1,20 +1,21 @@
-# Depends on: git
+# Depends on: meson
 
 description="Faba is a sexy and modern icon theme with Tango influences"
 contributors="jayce dot net at gmail dot com"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 url="https://github.com/snwh/faba-icon-theme"
 
 name=faba-icon-theme
-version=4.1.2
+version=4.3.1
 release=1
+source=()
 
 build() {
-
-   git clone https://github.com/snwh/${name}
-   cd $name
-   bash autogen.sh --prefix=/usr
-   make
-   make DESTDIR=$PKG install
-  
+git clone https://github.com/snwh/${name}
+cd $name
+mkdir build
+cd build
+meson --prefix=/usr -Dsystemd=false
+ninja
+DESTDIR=$PKG ninja install
 }

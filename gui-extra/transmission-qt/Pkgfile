@@ -6,8 +6,8 @@ packager="remy <remy@nutyx.org>"
 contributors="Alienus, Tnut"
 
 name=transmission-qt
-version=2.93
-
+version=2.94
+release=1
 source=(https://raw.githubusercontent.com/transmission/transmission-releases/master/transmission-$version.tar.xz)
 
 build() {
@@ -32,5 +32,4 @@ install -Dm644 -t $PKG/usr/share/transmission-qt/translations qt/translations/*.
     
 install -m644 ./qt/transmission-qt.desktop $PKG/usr/share/applications/transmission-qt.desktop
 install -m644 ./qt/icons/transmission.png  $PKG/usr/share/pixmaps/transmission-qt.png
-
 }

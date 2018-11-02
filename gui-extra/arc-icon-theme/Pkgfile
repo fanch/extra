@@ -8,11 +8,9 @@ url="https://github.com/horst3180/arc-icon-theme"
 name=arc-icon-theme
 version=20161122
 release=1
-
 source=(https://github.com/horst3180/$name/archive/$version.tar.gz)
 
 build() {
-
     cd $SRC/$name-$version
     ./autogen.sh --prefix=/usr
     make

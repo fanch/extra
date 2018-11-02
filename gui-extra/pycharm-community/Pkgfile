@@ -6,10 +6,8 @@ packager="remy <remy@nutyx.org>"
 contributors="Graknu"
 
 name=pycharm-community
-version=2017.3.3
+version=2018.2.4
 release=1
-
-
 source=(https://download.jetbrains.com/python/$name-$version.tar.gz
 	pycharm-community.desktop)
  

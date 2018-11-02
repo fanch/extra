@@ -1,1 +1,1 @@
-ln -sf bin/mono-sgen bin/mono
+cert-sync /etc/ssl/certs/ca-certificates.crt

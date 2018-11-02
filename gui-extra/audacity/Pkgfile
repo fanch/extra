@@ -2,27 +2,33 @@
 
 description="A program that lets you manipulate digital audio waveforms"
 url="http://web.audacityteam.org/"
-packager="greg<greg@nutyx.org>"
+packager="fanch<fanch@nutyx.org>"
 contributors="Tnut"
 
 name=audacity
-version=2.2.1
+version=2.3.0
 release=1
 
-source=(https://github.com/audacity/audacity/archive/Audacity-$version.zip
-)
+source=(https://github.com/audacity/audacity/archive/Audacity-$version.zip)
 
 build() {
-
 cd $name-Audacity-$version
-WX_CONFIG=wx-config-gtk3 ./configure --prefix=/usr --with-libsamplerate
+WX_CONFIG=wx-config-gtk3 ./configure  --prefix=/usr \
+    --with-libsndfile \
+    --with-ffmpeg \
+    --with-expat \
+    --with-lame \
+    --with-libsoxr \
+    --with-portaudio \
+    --with-portmidi \
+    --with-libflac \
+    --with-libid3tag \
+    --with-libsamplerate \
+    --with-sbsms \
+    --with-soundtouch \
+    --with-libtwolame \
+    --with-libvorbis \
+    --with-lv2
 make
-
-}
-
-package() {
-
-cd $SRC/$name-Audacity-$version
-make DESTDIR=$PKG install
-	
+make DESTDIR=$PKG install	
 }

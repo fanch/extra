@@ -7,11 +7,11 @@ contributors="Pierre B"
 
 name=xquisite
 version=0.4.6
-release=2
+release=3
 
 run=(gtk-update-icon-cache)
 
-source=(http://downloads.nutyx.org/files/$name-$version.tar.gz)
+source=(https://download.tuxfamily.org/nutyx/files/$name-$version.tar.gz)
 
 build() {
 mkdir -p $PKG//usr/share/icons/

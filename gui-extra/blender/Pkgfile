@@ -2,42 +2,55 @@
 
 description="A fully integrated 3D graphics creation suite"
 url="http://www.blender.org"
-packager="greg <greg@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 contributors="tnut"
 
 run=(python)
 
 name=blender
-version=2.79a
-
-source=(http://download.blender.org/source/blender-$version.tar.gz)
+version=2.79b
+release=1
+source=(http://download.blender.org/source/blender-$version.tar.gz
+python37.patch
+ffmpeg4.0.patch
+tree_hpp.patch
+util_sseb.patch
+openvdb3-abi.patch
+stl_export_iter.patch)
 
 build() {
-
   cd $name-$version
+  patch -Np1 -i $SRC/python37.patch
+  patch -Np1 -i $SRC/ffmpeg4.0.patch
+  patch -Np1 -i $SRC/tree_hpp.patch
+  patch -Np1 -i $SRC/util_sseb.patch
+  patch -Np1 -i $SRC/openvdb3-abi.patch
+  patch -Np1 -i $SRC/stl_export_iter.patch
+  
   mkdir build
   cd    build
 
   export CFLAGS="${CFLAGS} -DOPENVDB_3_ABI_COMPATIBLE"
   export CXXFLAGS="${CXXFLAGS} -DOPENVDB_3_ABI_COMPATIBLE"
 
-	cmake -C../build_files/cmake/config/blender_full.cmake .. \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DWITH_INSTALL_PORTABLE=OFF \
-		-DWITH_PYTHON_INSTALL=OFF \
-		-DWITH_SYSTEM_OPENJPEG=ON \
-		-DWITH_OPENSUBDIV=ON \
-		-DWITH_LLVM=ON \
-		-DWITH_SYSTEM_OPENJPEG=ON \
-		-DWITH_GL_PROFILE_CORE=OFF \
-		-DWITH_GL_PROFILE_ES20=OFF \
-		-DPYTHON_VERSION=3.6 \
-		-DPYTHON_LIBPATH=/usr/lib \
-		-DPYTHON_LIBRARY=python3.6m \
-		-DPYTHON_INCLUDE_DIRS=/usr/include/python3.6m
-
-	make
+	cmake -C../build_files/cmake/config/blender_release.cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_INSTALL_PORTABLE=OFF \
+    -DWITH_PYTHON_INSTALL=OFF \
+    -DOPENIMAGEIO_ROOT_DIR=/usr \
+    -DWITH_SYSTEM_OPENJPEG=ON \
+    -DWITH_GL_PROFILE_CORE=OFF \
+    -DWITH_GL_PROFILE_ES20=OFF \
+    -DWITH_LLVM=ON \
+    -DWITH_CYCLES_CUDA_BINARIES=ON \
+    -DWITH_CYCLES_PTEX=OFF \
+    -DCYCLES_CUDA_BINARIES_ARCH="sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61;sm_62;sm_70;sm_72;sm_75" \
+    -DPYTHON_VERSION=3.7 \
+    -DPYTHON_LIBPATH=/usr/lib \
+    -DPYTHON_LIBRARY=python3.7m \
+    -DPYTHON_INCLUDE_DIRS=/usr/include/python3.7m
+  make
 
 	make DESTDIR=$PKG install
 

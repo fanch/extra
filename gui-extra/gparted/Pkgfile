@@ -1,38 +1,72 @@
-# Depends on: ssh-askpass gnome-doc-utils gtk2 parted gtkmm2 libsigc++ ntfs-3g lvm2 docbook-xsl
+# Depends on: polkit-gnome ssh-askpass gnome-doc-utils gtk2 parted gtkmm2 libsigc++ ntfs-3g lvm2 docbook-xsl
 
 description="Gparted is the Gnome Partition Editor, a Gtk 2 GUI that can create, reorganise or delete disk partitions."
 url="http://gparted.sourceforge.net/"
-packager="greg <greg@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 contributors="Pierre B,tnut"
-
-name=gparted
-version=0.30.0
-release=1
 
 run=(ssh-askpass)
 
+name=gparted
+version=0.32.0
+release=1
 source=(http://downloads.sourceforge.net/$name/$name-$version.tar.gz)
 
 build() {
-
 cd $name-$version
 ./configure --prefix=/usr    \
+            --disable-doc    \
             --disable-static
             
 make
 make DESTDIR=$PKG install
 
-sed -i 's/Exec=/Exec=sudo -A /' \
-$PKG/usr/share/applications/gparted.desktop
+cp -v $PKG/usr/share/applications/gparted.desktop $PKG/usr/share/applications/gparted.desktop.back 
+sed -i 's/Exec=/Exec=sudo -A /'               $PKG/usr/share/applications/gparted.desktop
+
+cp -v $PKG/usr/share/applications/gparted.desktop \
+                                     $PKG/usr/share/applications/gparted.desktop.back 
+sed -i 's:/usr/bin/gparted:/usr/bin/gparted_polkit:' \
+                                   $PKG/usr/share/applications/gparted.desktop      
+
+cat > $PKG/usr/bin/gparted_polkit << "EOF" 
+#!/bin/bash
+
+pkexec /usr/bin/gparted $@
+EOF
+
+chmod -v 0755 $PKG/usr/bin/gparted_polkit
+
+cat > $PKG/usr/share/polkit-1/actions/org.gnome.gparted.policy << "EOF"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+  <action id="org.freedesktop.policykit.pkexec.run-gparted">
+    <description>Run GParted</description>
+    <message>Authentication is required to run GParted</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/gparted</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+</policyconfig>
+EOF
+
+chmod -v 0644 $PKG/usr/share/polkit-1/actions/org.gnome.gparted.policy
 }
 
 doc() {
-
 cd $PKG
 bsdtar -cf \
 $PKGMK_PACKAGE_DIR/${name}.doc${PKGMK_BUILDVER}any.cards.tar \
 usr/share/gnome
 
 rm -r usr/share/gnome
-
 }

@@ -6,14 +6,12 @@ contributors="berlius"
 
 name=sendmail
 version=8.15.2
-release=3
-nutyx_version=9.92
-
-source=(http://downloads.nutyx.org/files/nutyx-${nutyx_version}.tar.xz
-	ftp://ftp.sendmail.org/pub/$name/$name.$version.tar.gz site.config.m4)
+release=4
+source=(ftp://ftp.sendmail.org/pub/$name/$name.$version.tar.gz site.config.m4)
 
 build() {
-
+	source /etc/blfs-bootscripts
+	wget http://www.linuxfromscratch.org/blfs/downloads/svn/$scripts-$scriptsversion.tar.bz2
 	cd $name-$version
     
 	cp -v $SRC/site.config.m4 devtools/Site
@@ -67,7 +65,9 @@ build() {
 	cd ../..
 
 	# Service
-	cd $SRC/nutyx-${nutyx_version}
+	cd $SRC
+	tar xf $scripts-$scriptsversion.tar.bz2
+	cd $SRC/$scripts-$scriptsversion
 	make DESTDIR=$PKG install-sendmail
 
 	# Dirty but needed

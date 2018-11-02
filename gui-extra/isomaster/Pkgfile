@@ -14,8 +14,6 @@ source=(http://littlesvr.ca/isomaster/releases/$name-$version.tar.bz2)
 
 build() {
   cd $name-$version
-  
   make PREFIX=/usr
-
   make PREFIX=/usr DESTDIR=$PKG install
 }

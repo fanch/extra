@@ -8,7 +8,6 @@ contributors=""
 name=terminus-font
 version=4.46
 release=1
-
 source=(http://downloads.sourceforge.net/project/$name/$name-$version/$name-$version.tar.gz)
 
 prepare() {

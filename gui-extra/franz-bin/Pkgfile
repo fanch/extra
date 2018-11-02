@@ -1,0 +1,35 @@
+# Description: Combines chat & messaging services into one application.
+# URL: http://meetfranz.com/
+# Packager: NuTyX core team
+# Depends on: alsa-lib bash desktop-file-utils gconf gtk2 libnotify xorg-libxtst nss xorg-libxscrnsaver
+
+name=franz-bin
+version=5.0.0-beta.18
+release=1
+source=(https://github.com/meetfranz/franz/releases/download/v${version//_/-}/franz_${version//_/-}_amd64.deb 
+franz-bin.patch)
+
+build() {
+cd $SRC
+bsdtar -xJf franz_5.0.0-beta.18_amd64.deb
+bsdtar -xJf data.tar.xz
+
+  # Install package data
+  mv usr ${PKG}
+  install -dm755 ${PKG}/usr/bin ${PKG}/usr/lib
+  mv opt/Franz ${PKG}/usr/lib/franz
+  ln -s ../lib/franz/franz ${PKG}/usr/bin/franz
+
+  # Permission fix
+  chmod 644 "${PKG}/usr/lib/franz/libnode.so"
+
+  # Fix binary path in .desktop file
+  patch -d ${PKG} -p1 < ${name}.patch
+
+  # Link licenses
+  install -dm755 ${PKG}/usr/share/licenses/${name}
+  ln -s /usr/lib/franz/LICENSE.electron.txt \
+    ${PKG}/usr/share/licenses/${name}/LICENSE.electron.txt
+  ln -s /usr/lib/franz/LICENSES.chromium.html \
+    ${PKG}/usr/share/licenses/${name}/LICENSES.chromium.html
+}

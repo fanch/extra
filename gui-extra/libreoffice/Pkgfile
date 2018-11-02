@@ -1,4 +1,4 @@
-# Depends on: tar apache-ant avahi bluez openldap python cups curl dbus-glib dconf libatomic-ops gperf gtk2 gtk3 perl-archive-zip perl-xml-parser boost expat gstreamer-plugins-base gnutls sane valgrind libgsf libjpeg-turbo librsvg libxml2 libxslt neon nss postgresql redland icu mesa hunspell gsfonts dejavu-ttf p7zip neon npapi-sdk clucene serf unixodbc xdg-utils xorg-glu desktop-file-utils shared-mime-info
+# Depends on: python perl-archive-zip unzip zip icu cups poppler-glib xorg-fontconfig libxslt kerberos gtk2 xorgproto dbus-glib mesa postgresql
 
 PKGMK_IGNORE_UNPACK="yes"
 
@@ -10,8 +10,8 @@ contributors="Pierre B, Tnut, Greg"
 run=(shared-mime-info xdg-utils desktop-file-utils) 
 
 name=libreoffice
-version=6.0.2.1
-
+version=6.1.2.1
+release=1
 source=(http://download.documentfoundation.org/libreoffice/src/${version%.*}/$name-$version.tar.xz
 	http://download.documentfoundation.org/libreoffice/src/${version%.*}/$name-dictionaries-$version.tar.xz
 	http://download.documentfoundation.org/libreoffice/src/${version%.*}/$name-help-$version.tar.xz
@@ -19,9 +19,7 @@ source=(http://download.documentfoundation.org/libreoffice/src/${version%.*}/$na
 
 prepare() {
         unset ACLOCAL
-        export LO_PREFIX="/usr"
 
-        cd $SRC
         tar -xf $name-$version.tar.xz --no-overwrite-dir
 
         cd $name-$version
@@ -41,62 +39,46 @@ prepare() {
 }
 
 build() {
-export LO_PREFIX="/usr"
 cd $name-$version
 
-./autogen.sh --prefix=${LO_PREFIX} \
-             --sysconfdir=/etc \
-             --with-vendor="NuTyX" \
-             --with-lang="es de fr it pt fi nb nl da sv tr ru pl"   \
-             --with-help \
-             --without-fonts \
-             --with-myspell-dicts \
-             --with-alloc=system \
-             --without-junit \
-             --without-system-dicts \
-             --enable-gstreamer-1-0 \
-             --disable-dconf \
-             --disable-odk \
-             --disable-firebird-sdbc \
-             --enable-release-build=yes \
-             --enable-python=system \
-             --enable-dbus \
-             --with-system-apr \
-             --with-system-boost \
-             --with-system-clucene \
-             --with-system-cairo \
-             --with-system-curl \
-             --with-system-expat \
-             --with-system-icu \
-             --with-system-jpeg \
-             --with-system-lcms2 \
-             --with-system-libatomic_ops \
-             --with-system-libpng \
-             --with-system-libxml \
-             --enable-gtk3 \
-             --with-system-neon \
-             --with-system-nss \
-             --with-system-odbc \
-             --with-system-openldap \
-             --with-system-openssl \
-             --with-system-postgresql \
-             --with-system-redland \
-             --with-system-serf \
-             --with-system-zlib \
-             --with-parallelism=$(getconf _NPROCESSORS_ONLN)
 
- make -i build-nocheck
- make -i DESTDIR=$PKG distro-pack-install
+
+./autogen.sh --prefix=/usr \
+	--sysconfdir=/etc \
+	--with-vendor="NuTyX" \
+	--with-lang="ar es de fr hi it ja pt fi nb nl nn da sv tr ru pl zh-CN"   \
+	--with-myspell-dicts \
+	--without-system-dicts \
+	--enable-release-build=yes \
+	--without-java \
+	--without-fonts \
+	--without-doxygen \
+	--disable-gtk3 \
+	--disable-gstreamer-1-0 \
+	--enable-python=system \
+	--with-system-cairo \
+	--with-system-curl \
+	--with-system-expat \
+	--with-system-icu \
+	--with-system-libpng \
+	--with-system-jpeg \
+	--with-system-openssl \
+	--with-system-poppler \
+	--with-system-postgresql \
+	--with-parallelism=$(getconf _NPROCESSORS_ONLN)
+
+CPPFLAGS='-DU_USE_ICU_NAMESPACE=1' make -i build-nocheck
+# make -i build-nocheck
+make -i DESTDIR=$PKG distro-pack-install
 
 	# Dictionaries installation
 	chown -cR 0:0 dictionaries/ 
 	for lang in en fr_FR es de it_IT pt_PT no nl_NL sv_SE da_DK ru_RU
 	do
-	  mkdir -pv $PKG/${LO_PREFIX}/lib/libreoffice/share/extensions/dict-$lang
-	  cp -R dictionaries/$lang/* $PKG/${LO_PREFIX}/lib/libreoffice/share/extensions/dict-$lang
+	  mkdir -pv $PKG/usr/lib/$name/share/extensions/dict-$lang
+	  cp -R dictionaries/$lang/* $PKG/usr/lib/$name/share/extensions/dict-$lang
 	done
         
 	# Nettoyage
-	rm -rf $PKG/gid*
+	rm -rf $PKG/gid_Module_*
 }
-echo "update-desktop-database" >> libreoffice.post-install

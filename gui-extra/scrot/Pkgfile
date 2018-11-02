@@ -5,16 +5,15 @@
 # Depends on: giblib
 
 name=scrot
-version=0.8.17
+version=0.8.18
 release=1
-
-source=("http://scrot.sourcearchive.com/downloads/0.8-17/scrot_0.8.orig.tar.gz")
+source=(http://http.debian.net/debian/pool/main/s/${name}/${name}_${version%.*}.orig.tar.gz
+        http://http.debian.net/debian/pool/main/s/${name}/${name}_${version%.*}-${version##*.}.debian.tar.xz)
         
 build() {
-  cd $SRC/$name-0.8
+  cd $SRC/${name}-${version%.*}
   ./configure --prefix=/usr \
               --mandir=/usr/share/man
   make
-
   make DESTDIR=$PKG docsdir=/usr/share/doc/scrot install
 }

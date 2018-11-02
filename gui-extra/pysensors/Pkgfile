@@ -2,7 +2,7 @@
 # URL: https://bitbucket.org/blackjack/pysensors/
 # Packager: Chris Farrell, timcowchip at gmail dot com
 # Maintainer: Chris Farrell, timcowchip at gmail dot com
-# Depends on: python2 python2-setuptools lm-sensors
+# Depends on: python2 python-setuptools lm-sensors
 # Nice to have: hddtemp
 
 
@@ -13,5 +13,5 @@ source=(https://pypi.python.org/packages/source/P/PySensors/PySensors-$version.t
 
 build() {
   cd PySensors-$version
-  python setup.py install -O1 --prefix='/usr' --root=$PKG --optimize=1
+  python2 setup.py install -O1 --prefix='/usr' --root=$PKG --optimize=1
 }

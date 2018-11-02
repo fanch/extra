@@ -1,21 +1,20 @@
-# Depends on: python2-setuptools
+# Depends on: python-setuptools
 
 description="Parse RSS and Atom feeds in Python
 url="https://github.com/kurtmckee/feedparser
-packager="greg <greg@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 
-# Depends on: python2-setuptools
+# Depends on: python-setuptools
 
 name=feedparser
 version=5.2.1
 release=1
-
 source=(https://github.com/kurtmckee/feedparser/archive/$version.tar.gz)
 
 build() {
 
   cd $name-$version
-  /usr/bin/python setup.py build
-  /usr/bin/python setup.py install --prefix=/usr --root=$PKG --optimize=1
+  /usr/bin/python2 setup.py build
+  /usr/bin/python2 setup.py install --prefix=/usr --root=$PKG --optimize=1
   
 }

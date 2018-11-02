@@ -3,17 +3,17 @@
 description="A GTK+ audio player for GNU/Linux"
 url="http://deadbeef.sourceforge.net"
 contributors="Pierre B"
-packager="greg <greg@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
 
 name=deadbeef
 version=0.7.2
-release=2
+release=3
 
 source=(http://downloads.sourceforge.net/project/$name/$name-$version.tar.bz2)
 
 build () {
   cd $name-$version
-  CXX="g++ -std=c++98" ./configure --prefix=/usr --disable-ffmpeg --enable-gtk3
+  ./configure --prefix=/usr 
   make 
   make DESTDIR=$PKG install
 }
