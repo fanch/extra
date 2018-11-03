@@ -2,8 +2,8 @@
 
 description="Multithreaded video transcoder"
 url="https://handbrake.fr"
-contributors=""
-packager="remy <remy@nutyx.org>"
+contributors="tnut <tnut@nutyx.org>"
+packager="fanch <fanch@nutyx.org>"
  
 name=handbrake
 version=1.1.2
