@@ -1,23 +1,28 @@
-# Depends on: shared-mime-info gtk3 libpcap pcre hicolor-icon-theme
+# Depends on: shared-mime-info gtk3 libpcap pcre hicolor-icon-theme lua kerberos gnutls libssh 
 
 description="Network Sniffer with nice GTK3 UI"
 url="http://www.wireshark.org"
 packager="tnut <tnut@nutyx.org>"
 contributors="fanch,tnut,Greg"
 
-name=wireshark
-version=2.4.5
-
 run=(shared-mime-info)
 
-source=(https://1.eu.dl.wireshark.org/src/wireshark-$version.tar.xz)
+name=wireshark
+version=2.6.4
+release=1
+source=(https://1.eu.dl.wireshark.org/src/wireshark-$version.tar.xz
+		wireshark-2.6.4-lua_5_3-1.patch)
 
 build() {
   cd $name-$version
-
+patch -Np1 -i ../wireshark-2.6.4-lua_5_3-1.patch
   ./configure --prefix=/usr \
               --with-plugins=/usr/lib/$name/plugins \
-              --without-krb5 \
+              --with-krb5 \
+              --with-pcap \
+              --with-zlib \
+              --with-lua \
+              --with-ssl \
               --with-qt=no \
               --with-gtk=yes
 
@@ -25,11 +30,6 @@ build() {
   make DESTDIR=$PKG install
 
   # install some icons
-  install -d $PKG/usr/share/$name/pixmaps
-  install -m 644 \
-    image/{hi,lo}{16,32,48}-app-$name.png \
-    $PKG/usr/share/$name/pixmaps
-
-  # Don't remove these files, they are read by wireshark's about box.
-  #rm -f $PKG/usr/share/$name/{AUTHORS-SHORT,COPYING}
+  install -Dm 755 .libs/wireshark-gtk ${PKG}/usr/bin/wireshark-gtk
+  install -Dm 644 wireshark-gtk.desktop -t ${PKG}/usr/share/applications
 }
