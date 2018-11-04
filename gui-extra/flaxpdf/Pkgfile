@@ -6,8 +6,9 @@ contributors="timcowchip, tnut"
 packager="greg <greg@nutyx.org>"
 
 name=flaxpdf
-version=git
-release=2
+version=0.7.3
+release=1
+source=()
 
 build() {
 	git clone https://github.com/clbr/flaxpdf.git
@@ -18,9 +19,7 @@ build() {
 	./autogen.sh
 
    ./configure --prefix=/usr 
-
 	make
-
 	make DESTDIR="$PKG" install
 }
 
