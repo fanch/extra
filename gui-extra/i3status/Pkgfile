@@ -2,9 +2,10 @@
 
 description="Generate status bar to use with i3bar,dzen2 or xmobar"
 url="https://i3wm.org/i3status/"
-name=i3status
-version=2.11
 
+name=i3status
+version=2.12
+release=1
 source=(https://i3wm.org/i3status/$name-$version.tar.bz2)
 
 build() {
